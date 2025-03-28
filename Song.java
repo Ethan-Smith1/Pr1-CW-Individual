@@ -18,9 +18,16 @@ public class Song {
     /**
      * Returns a string representation of the song so that it can be written to the songs.txt file
      */
-    @Override
+    @Override //Overrides the default toString() method
     public String toString() {
         return songTitle + "," + artistName + "," + playCount;
+    }
+
+    /**
+     * Increments playCount by one each time the song is listened to
+     */
+    public void incrementPlayCount() {
+        playCount++; 
     }
 
     /**

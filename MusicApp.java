@@ -78,6 +78,8 @@ public class MusicApp {
                 } catch (InterruptedException e) {
                     System.out.println("There was an error playing the song\n");
                 }
+                song.incrementPlayCount();
+                saveSongs(); //Saves the changes to songList
                 return; //Exits the method after removing the song since there is no need to look through the rest
             }
         if (!songFound) {
