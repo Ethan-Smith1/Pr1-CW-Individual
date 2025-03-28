@@ -12,6 +12,31 @@ import java.util.Comparator;
 public class MusicApp {
     private static ArrayList<Song> songList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
+    private static final int SONG_LENGTH = 4; //The length of time that as song will simulate being played for
+
+    /**
+     * Simulates playing a song
+     */
+    public static void playSong() {
+        System.out.print("Enter the title of the song you want to play: ");
+        String songToPlay = scanner.nextLine();
+
+        boolean songFound = false;
+        for (Song song : songList) {
+            if (song.getSongTitle().equalsIgnoreCase(songToPlay)) {
+                System.out.println("Now playing: " + song.getSongTitle() + " by " + song.getArtistName()+"...\n");
+                songFound = true;
+                try { //Thread.sleep requires a try and catch statement 
+                    Thread.sleep(SONG_LENGTH*1000); //Simulates the song playing for the time specified by SONG_LENGTH (SONG_LENGTH is converted to miliseconds)
+                } catch (InterruptedException e) {
+                    System.out.println("There was an error playing the song\n");
+                }
+                return;
+            }
+        if (!songFound) {
+            System.out.println("Song not found in your library\n"); //Informs the user if the song they are searching for doesnt exist
+        }}
+    }
 
     /**
      * Handles the logic for adding new songs to the songList 
@@ -50,7 +75,7 @@ public class MusicApp {
         }
 
         if (!songFound) {
-            System.out.println("Song not found in the library.\n"); //Notifies the user if the song isnt found
+            System.out.println("Song not found in your library.\n"); //Notifies the user if the song isnt found
         }
     }
 
@@ -112,11 +137,12 @@ public class MusicApp {
     public static void main(String[] args) {
         while (true) {
             System.out.println("----- Not Spotify -----");
-            System.out.println("1. Add a new song to your library");
-            System.out.println("2. Remove a song from your library");
-            System.out.println("3. View your library");
-            System.out.println("4. View songs by play count");
-            System.out.println("5. Exit");
+            System.out.println("1. Play song");
+            System.out.println("2. Add a new song to your library");
+            System.out.println("3. Remove a song from your library");
+            System.out.println("4. View your library");
+            System.out.println("5. View songs by play count");
+            System.out.println("6. Exit");
             System.out.print("Choose an option: ");
             int userSelection = scanner.nextInt();
             scanner.nextLine();
@@ -124,18 +150,21 @@ public class MusicApp {
 
             switch (userSelection) {
                 case 1:
-                    addSong();
+                    playSong();
                     break;
                 case 2:
-                    removeSong();
+                    addSong();
                     break;
                 case 3:
-                    viewLibrary();
+                    removeSong();
                     break;
                 case 4:
-                    viewSongsByPlayCount();
+                    viewLibrary();
                     break;
                 case 5:
+                    viewSongsByPlayCount();
+                    break;
+                case 6:
                     System.out.println("Exiting the application.");
                     return;
                 default:
