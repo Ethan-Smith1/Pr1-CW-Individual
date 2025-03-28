@@ -55,7 +55,7 @@ public class MusicApp {
     }
 
     /**
-     * Displays all songs in songList within a table
+     * Displays all songs in songList
      */
     public static void viewLibrary() {
         if (songList.isEmpty()) {
@@ -68,6 +68,38 @@ public class MusicApp {
 
             //Rows
             for (Song song : songList) {
+                System.out.printf("%-40s %-30s %-12d\n", song.getSongTitle(), song.getArtistName(), song.getPlayCount());
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * Displays all songs with a play count equal to or higher than the user's input
+     */
+    public static void viewSongsByPlayCount() {
+        System.out.print("Enter the minimum play count: ");
+        int minPlayCount = scanner.nextInt();
+        scanner.nextLine();
+
+        ArrayList<Song> filteredSongList = new ArrayList<>(); //New list where only songs with a playCount >= minPlayCount will be added
+        for (Song song : songList) {
+            if (song.getPlayCount() >= minPlayCount) {
+                filteredSongList.add(song); //Adds the song to the filtered list
+            }
+        }
+
+        if (filteredSongList.isEmpty()) {
+            System.out.println("No songs found with a play count of " + minPlayCount + " or higher.\n");
+        } else {
+            Collections.sort(filteredSongList, Comparator.comparingInt(Song::getPlayCount).reversed()); // Sorts filteredSongList by highest play count to lowest
+
+            System.out.println("----- Songs with at least " + minPlayCount + " plays -----");
+            System.out.printf("%-40s %-30s %-12s\n", "Song Title", "Artist", "Play Count");
+            System.out.println("------------------------------------------------------------------------------");
+
+            //Rows
+            for (Song song : filteredSongList) {
                 System.out.printf("%-40s %-30s %-12d\n", song.getSongTitle(), song.getArtistName(), song.getPlayCount());
             }
             System.out.println();
@@ -101,7 +133,7 @@ public class MusicApp {
                     viewLibrary();
                     break;
                 case 4:
-                    // Implement view songs by play count functionality
+                    viewSongsByPlayCount();
                     break;
                 case 5:
                     System.out.println("Exiting the application.");
