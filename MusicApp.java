@@ -1,6 +1,14 @@
 import java.util.ArrayList; //ArrayList class used to create a list of songs (which acts as the music library)
 import java.util.Scanner; //Scanner class to read user inputs from the console
 
+//These classes allow us to sort the songList alphabetically
+import java.util.Collections;
+import java.util.Comparator;
+
+/**
+ * The main class for the Not Spotify app.
+ * It allows users to add songs, remove songs, view their library and view songs by play count.
+ */
 public class MusicApp {
     private static ArrayList<Song> songList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
@@ -20,6 +28,7 @@ public class MusicApp {
         Song song = new Song(title, artist, playCount); //Creates a new song object with the info provided by the user
         songList.add(song);//Adds the new object to songList (essentailly adding a new song to the music library)
         System.out.println(song.getSongTitle()+" by "+song.getArtistName()+" added to library!\n");
+        Collections.sort(songList, Comparator.comparing(Song::getSongTitle)); //Sorts songList alphabetically (A-Z)
     }
 
     /**
@@ -45,7 +54,25 @@ public class MusicApp {
         }
     }
 
+    /**
+     * Displays all songs in songList within a table
+     */
+    public static void viewLibrary() {
+        if (songList.isEmpty()) {
+            System.out.println("Your library is empty.\n");
+        } else {
+            System.out.println("----- Your Song Library -----");
+            //Header
+            System.out.printf("%-40s %-30s %-12s\n", "Song Title", "Artist", "Play Count"); // "%-40s %-30s %-12d" represents width in characters of each table column
+            System.out.println("------------------------------------------------------------------------------");
 
+            //Rows
+            for (Song song : songList) {
+                System.out.printf("%-40s %-30s %-12d\n", song.getSongTitle(), song.getArtistName(), song.getPlayCount());
+            }
+            System.out.println();
+        }
+    }
 
     /**
      * Displays the main menu which allows the user to navigate to different areas of the app
@@ -71,7 +98,7 @@ public class MusicApp {
                     removeSong();
                     break;
                 case 3:
-                    // Implement view library functionality
+                    viewLibrary();
                     break;
                 case 4:
                     // Implement view songs by play count functionality
