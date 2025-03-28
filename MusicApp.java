@@ -64,7 +64,7 @@ public class MusicApp {
             System.out.println("----- Your Song Library -----");
             //Header
             System.out.printf("%-40s %-30s %-12s\n", "Song Title", "Artist", "Play Count"); // "%-40s %-30s %-12d" represents width in characters of each table column
-            System.out.println("------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------");
 
             //Rows
             for (Song song : songList) {
@@ -96,7 +96,7 @@ public class MusicApp {
 
             System.out.println("----- Songs with at least " + minPlayCount + " plays -----");
             System.out.printf("%-40s %-30s %-12s\n", "Song Title", "Artist", "Play Count");
-            System.out.println("------------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------");
 
             //Rows
             for (Song song : filteredSongList) {
