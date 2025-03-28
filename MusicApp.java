@@ -23,6 +23,31 @@ public class MusicApp {
     }
 
     /**
+     * Handles the logic for removing a song from the songList by its title.
+     */
+    public static void removeSong() {
+        System.out.print("Enter the title of the song that you want to remove from your library: ");
+        String songToRemove = scanner.nextLine(); 
+
+        boolean songFound = false; 
+        for (int index = 0; index < songList.size(); index++) { 
+            Song song = songList.get(index);
+            if (song.getSongTitle().equalsIgnoreCase(songToRemove)) {
+                songList.remove(index); //Removes the song if it is found
+                System.out.println(songToRemove + " has been removed from your library.\n");
+                songFound = true; 
+                return; // Exits the method after removing the song since there is no need to look through the rest
+            }
+        }
+
+        if (!songFound) {
+            System.out.println("Song not found in the library.\n"); //Notifies the user if the song isnt found
+        }
+    }
+
+
+
+    /**
      * Displays the main menu which allows the user to navigate to different areas of the app
      */
     public static void main(String[] args) {
@@ -36,13 +61,14 @@ public class MusicApp {
             System.out.print("Choose an option: ");
             int userSelection = scanner.nextInt();
             scanner.nextLine();
+            System.out.println();
 
             switch (userSelection) {
                 case 1:
                     addSong();
                     break;
                 case 2:
-                    // Implement remove song functionality
+                    removeSong();
                     break;
                 case 3:
                     // Implement view library functionality
