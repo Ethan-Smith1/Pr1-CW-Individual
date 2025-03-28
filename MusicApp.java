@@ -1,3 +1,11 @@
+//These classes are used to read and write to the songs.txt file
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+
 import java.util.ArrayList; //ArrayList class used to create a list of songs (which acts as the music library)
 import java.util.Scanner; //Scanner class to read user inputs from the console
 
@@ -13,6 +21,45 @@ public class MusicApp {
     private static ArrayList<Song> songList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     private static final int SONG_LENGTH = 4; //The length of time that as song will simulate being played for
+
+    /**
+        * Loads songs fom songs.txt into songList
+     */
+    public static void loadSongs() {
+        File file = new File("songs.txt");
+
+        //The resaon buffer reader is used is becuase it is able to read chuncks of files at a time (in this case a line) whereas the normal file reader reads one character per line making less efficent. 
+        //The larger the songs.txt file gets the bigger performace impact it would have hence why I have used buffered reader
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) { 
+            String line;
+            while ((line = bufferedReader.readLine()) != null) { 
+                String[] parts = line.split(","); //Splits the whole line which is one string into multiple where there are ',' so that each part can be assigned to a variable
+                String songTitle = parts[0].trim(); 
+                String artistName = parts[1].trim();
+                int playCount = Integer.parseInt(parts[2].trim());
+                Song song = new Song(songTitle, artistName, playCount);
+                songList.add(song);
+                    
+                }
+            }
+            catch (IOException e) { 
+                System.out.println("Error whilst loading songs\n");
+            }
+        }
+
+    /**
+     * Saves the songList to the songs.txt file
+     */
+    public static void saveSongs() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("songs.txt"))) {
+            for (Song song : songList) {
+                writer.write(song.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving songs\n");
+        }
+    }
 
     /**
      * Simulates playing a song
@@ -31,7 +78,7 @@ public class MusicApp {
                 } catch (InterruptedException e) {
                     System.out.println("There was an error playing the song\n");
                 }
-                return;
+                return; //Exits the method after removing the song since there is no need to look through the rest
             }
         if (!songFound) {
             System.out.println("Song not found in your library\n"); //Informs the user if the song they are searching for doesnt exist
@@ -54,6 +101,7 @@ public class MusicApp {
         songList.add(song);//Adds the new object to songList (essentailly adding a new song to the music library)
         System.out.println(song.getSongTitle()+" by "+song.getArtistName()+" added to library!\n");
         Collections.sort(songList, Comparator.comparing(Song::getSongTitle)); //Sorts songList alphabetically (A-Z)
+        saveSongs(); //saves the changes to songList
     }
 
     /**
@@ -67,10 +115,11 @@ public class MusicApp {
         for (int index = 0; index < songList.size(); index++) { 
             Song song = songList.get(index);
             if (song.getSongTitle().equalsIgnoreCase(songToRemove)) {
+                songFound = true; 
                 songList.remove(index); //Removes the song if it is found
                 System.out.println(songToRemove + " has been removed from your library.\n");
-                songFound = true; 
-                return; // Exits the method after removing the song since there is no need to look through the rest
+                saveSongs(); //Saves the changes to songList
+                return; //Exits the method after removing the song since there is no need to look through the rest
             }
         }
 
@@ -135,6 +184,7 @@ public class MusicApp {
      * Displays the main menu which allows the user to navigate to different areas of the app
      */
     public static void main(String[] args) {
+        loadSongs();
         while (true) {
             System.out.println("----- Not Spotify -----");
             System.out.println("1. Play song");
